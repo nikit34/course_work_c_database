@@ -7,7 +7,7 @@
 
 
 typedef struct student {
-    // int id[6];
+    int id;
     char surname[21];
     char initials[5];
     char sex[2];
@@ -15,8 +15,8 @@ typedef struct student {
 } student;
 
 typedef struct marks {
-    // int id[6];
-    char mark[20];
+    int id;
+    int *mark_arr;
 } marks;
 
 #endif
