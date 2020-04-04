@@ -5,7 +5,8 @@ void info() {
     printf("\n\n############### For run program ###############\n\n");
     printf("call help  :  <-h> or <--help> (1 arg)\n");
     printf("clear file :  <-c> or <--clear> (1 arg) <file name> (2 arg with or without format)\n");
-    printf("write data :  <file name> (1 arg with or without format)\n");
+    printf("write data :  <-w> or <--write> (1 arg) <file name> (2 arg with or without format)\n");
+    printf("start calc :  <-s> or <--start> (1 arg) <file name> (2 arg with or without format)\n");
     printf("\n\n\n\n");
     printf("Format input data:\n");
     printf("    [Surname F.M.], [sex], [number group]\n");
@@ -19,14 +20,14 @@ void info() {
 }
 
 void preparation_file(char *file_name) {
-    char format_file[4] = ".txt";
+    char format_file[] = ".txt";
     int count_str = 0, count_substr = 0;
     bool flag;
     while(file_name[count_str] != '\0')
         count_str++;
     while(format_file[count_substr] != '\0')
         count_substr++;
-    for(int i = 0; i <= count_str - count_substr; i++) {
+    for(int i = 0; i <= (count_str - count_substr); i++) {
         for(int j = i; j < i + count_substr; j++) {
             flag = true;
             if(file_name[j] != format_file[j - i]) {
@@ -42,8 +43,7 @@ void preparation_file(char *file_name) {
 }
 
 struct marks* write_marks(struct student *s_in) {
-
-    marks *m_in = (marks*)malloc(sizeof(marks) + sizeof(int));
+    struct marks *m_in = (marks*)malloc(sizeof(marks) + sizeof(int));
     m_in->id = s_in->id;
     int two_consec_mark = 0, i = 0, bit = 0;
     char ch_mark, num_mark[3];
@@ -63,11 +63,10 @@ struct marks* write_marks(struct student *s_in) {
             empty_row_mark = false;
         } else if((ch_mark == 0x20 || ch_mark == 0x0A) && empty_row_mark == false) {
             i++;
-            m_in->mark_arr = (int*)realloc(m_in->mark_arr, sizeof(int) * i + i);
+            m_in->mark_arr = (int*)realloc(m_in->mark_arr, sizeof(int) * i * 2);
             sscanf(num_mark, "%d", (m_in->mark_arr + i));
-            for(int j = 0; j < sizeof(num_mark); j++) {
+            for(int j = 0; j < sizeof(num_mark); j++)
                 num_mark[j] = ' ';
-            }
             bit = 0;
             empty_row_mark = (ch_mark == 0x0A) ? true : false;
         } else {
@@ -81,6 +80,7 @@ struct marks* write_marks(struct student *s_in) {
 
 void write_input(char *file_name) {
     FILE *f = fopen(file_name, "at+");
+    fprintf(f, "id,surname,F.M.,sex,group,marks\n");
     (f == NULL) ? printf("cannot open file") : printf("open file for recard\nWrite as form '<surname> <initials> <sex> <num group>'\n\n");
     int two_consec = 0, num_word = 0, count_record = 0;
     char ch;
@@ -147,9 +147,12 @@ int main(int argc, char* argv[]) {
         preparation_file(argv[2]);
         FILE *f = fopen(argv[2], "w");
         fclose(f);
-    } else if(argc == 2 || (argc == 3 && (strcmp(argv[1], "-w") == 0 || strcmp(argv[1], "--write") == 0))) {
-        preparation_file(argv[argc - 1]);
-        write_input(argv[argc - 1]);
+    } else if(argc == 3 && (strcmp(argv[1], "-w") == 0 || strcmp(argv[1], "--write") == 0)) {
+        preparation_file(argv[2]);
+        write_input(argv[2]);
+    } else if(argc == 3 && (strcmp(argv[1], "-s") == 0 || strcmp(argv[1], "--start") == 0)) {
+        preparation_file(argv[2]);
+        start_calc(argv[2]);
     } else {
         printf("specify input line\n");
         return 1;
