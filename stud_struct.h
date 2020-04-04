@@ -34,9 +34,13 @@ void write_input(char *file_name);
 
 // struct calc.c
 typedef struct {
-    int *row_arr;
     int row_difference;
     int row_group;
+} unit;
+
+typedef struct {
+    int *row_arr;
+    unit disperse;
 } row_buffer;
 
 // function calc.c
