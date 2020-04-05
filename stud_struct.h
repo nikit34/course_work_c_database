@@ -36,6 +36,7 @@ void write_input(char *file_name);
 typedef struct {
     int row_difference;
     int row_group;
+    bool single;
 } unit;
 
 typedef struct {
