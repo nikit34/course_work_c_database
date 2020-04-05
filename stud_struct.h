@@ -28,6 +28,7 @@ void preparation_file(char *file_name);
 void info();
 struct marks* write_marks(struct student *s_in);
 void write_input(char *file_name);
+void read_file(char *file_name);
 
 
 // variable calc.c
