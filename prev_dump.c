@@ -200,6 +200,7 @@ int main(int argc, char *argv[])
   {
     preparation_file(argv[2]);
     FILE *f = fopen(argv[2], "w");
+    printf("\nfile cleared\n");
     fclose(f);
   }
   else if (argc == 3 && (strcmp(argv[1], "-r") == 0 || strcmp(argv[1], "--read") == 0))
